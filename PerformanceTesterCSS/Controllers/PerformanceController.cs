@@ -68,6 +68,18 @@ namespace PerformanceTesterCSS.Controllers
             stringBuilder.Append("Elapsed at prepare at with dictionary search: " + elapsedPrepare003X + ", at making view: " + elapsedView003X + ", html size: " + html003X.Length + "\n");
 
             stopwatch.Start();
+            List<ParticipationViewModel> participationViewModels004X = await GetParticipationViewModelsWithSingleRetrieve();
+            stopwatch.Stop();
+            long elapsedPrepare004X = stopwatch.ElapsedMilliseconds;
+            stopwatch.Reset();
+            stopwatch.Start();
+            String html004X = await this.RenderViewAsync<List<ParticipationViewModel>>("ParticipationsIndexWithSingleRetrieve", participationViewModels004X);
+            stopwatch.Stop();
+            long elapsedView004X = stopwatch.ElapsedMilliseconds;
+            stopwatch.Reset();
+            stringBuilder.Append("Elapsed at prepare at with single retrieve: " + elapsedPrepare004X + ", at making view: " + elapsedView004X + ", html size: " + html004X.Length + "\n");
+
+            stopwatch.Start();
             List<ParticipationViewModel> participationViewModels002 = null;
             for (int i = 0; i < 100; i++)
             {
@@ -113,6 +125,29 @@ namespace PerformanceTesterCSS.Controllers
 
             stringBuilder.Append("Approx elapsed at prepare at with dictionary search: " + elapsedPrepare003 + ", at making view: " + elapsedView003 + ", html size: " + html003.Length + "\n");
 
+            stopwatch.Start();
+            List<ParticipationViewModel> participationViewModels004 = null;
+            for (int i = 0; i < 100; i++)
+            {
+                participationViewModels004 = await GetParticipationViewModelsWithSingleRetrieve();
+            }
+            stopwatch.Stop();
+            long elapsedPrepare004 = stopwatch.ElapsedMilliseconds / 100;
+            stopwatch.Reset();
+
+            String html004 = null;
+            stopwatch.Start();
+            for (int i = 0; i < 10; i++)
+            {
+                html004 = await this.RenderViewAsync<List<ParticipationViewModel>>("ParticipationsIndexWithSingleRetrieve", participationViewModels004X);
+                //html004 = "test";
+            }
+            stopwatch.Stop();
+            long elapsedView004 = stopwatch.ElapsedMilliseconds / 10;
+            stopwatch.Reset();
+
+            stringBuilder.Append("Approx elapsed at prepare at with signle retreieve: " + elapsedPrepare004 + ", at making view: " + elapsedView004 + ", html size: " + html004.Length + "\n");
+
             stringBuilder.Append("Finished");
 
             return stringBuilder.ToString();
@@ -125,6 +160,28 @@ namespace PerformanceTesterCSS.Controllers
 
             foreach (Participation part in participations)
             {
+                participationViewModels.Add(new ParticipationViewModel
+                {
+                    Id = part.Id,
+                    User = part.User.Degree + " " + part.User.FirstName + " " + part.User.LastName,
+                    Season = part.Season.Name + " " + part.Season.EditionNumber,
+                    ConfPart = part.ConferenceParticipation.GetValueOrDefault(),
+                    PaperPub = part.PaperPublication.GetValueOrDefault()
+                });
+            }
+
+            return participationViewModels;
+        }
+
+        private async Task<List<ParticipationViewModel>> GetParticipationViewModelsWithSingleRetrieve()
+        {
+            List<Participation> participations = await _context.Participations.ToListAsync();
+            List<ParticipationViewModel> participationViewModels = new List<ParticipationViewModel>();
+
+            foreach (Participation part in participations)
+            {
+                part.User = _context.Users.Find(part.UserId);
+                part.Season = _context.Seasons.Find(part.SeasonId);
                 participationViewModels.Add(new ParticipationViewModel
                 {
                     Id = part.Id,
@@ -201,6 +258,40 @@ namespace PerformanceTesterCSS.Controllers
 
             foreach(Participation part in participations)
             {
+                participationViewModels.Add(new ParticipationViewModel
+                {
+                    Id = part.Id,
+                    User = part.User.Degree + " " + part.User.FirstName + " " + part.User.LastName,
+                    Season = part.Season.Name + " " + part.Season.EditionNumber,
+                    ConfPart = part.ConferenceParticipation.GetValueOrDefault(),
+                    PaperPub = part.PaperPublication.GetValueOrDefault()
+                });
+            }
+
+            stopwatch.Stop();
+            elapsedPrepare = stopwatch.ElapsedMilliseconds;
+            stopwatch.Reset();
+
+            ViewData["Info"] = "Elapsed at preparing: " + elapsedPrepare + "<br>";
+            stopwatch.Start();
+            ViewData["Stopwatch"] = stopwatch;
+
+            return View(participationViewModels);
+        }
+
+        public async Task<IActionResult> ParticipationsIndexWithSingleRetrieve()
+        {
+            long elapsedPrepare = 0;
+            Stopwatch stopwatch = new Stopwatch();
+            stopwatch.Start();
+
+            List<Participation> participations = await _context.Participations.ToListAsync();
+            List<ParticipationViewModel> participationViewModels = new List<ParticipationViewModel>();
+
+            foreach (Participation part in participations)
+            {
+                part.User = _context.Users.Find(part.UserId);
+                part.Season = _context.Seasons.Find(part.SeasonId);
                 participationViewModels.Add(new ParticipationViewModel
                 {
                     Id = part.Id,

@@ -21,7 +21,7 @@ namespace PerformanceTesterCSS.Entities
 
         [Column("season_id")]
         //[NotMapped]
-        public Int32 SeasonId { get; set; }
+        public Int64 SeasonId { get; set; }
 
         //[ForeignKey("user_id")]
         [NotMapped]
@@ -29,7 +29,7 @@ namespace PerformanceTesterCSS.Entities
 
         [Column("user_id")]
         //[NotMapped]
-        public Int32 UserId { get; set; }
+        public Int64 UserId { get; set; }
 
         [Column("conf_participation")]
         public Boolean? ConferenceParticipation { get; set; }
