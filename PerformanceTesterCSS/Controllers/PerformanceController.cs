@@ -25,7 +25,56 @@ namespace PerformanceTesterCSS.Controllers
             _context = dbCtx;
         }
 
-        public async Task<String> PerformFullTest()
+        public async Task<String> PerformFullTestOne()
+        {
+            //WARM UP
+            List<Participation> participations = await _context.Participations.Include(p => p.Season).Include(p => p.User).ToListAsync();
+
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.Append("Full test:\n");
+            Stopwatch stopwatch = new Stopwatch();
+
+            stopwatch.Start();
+            List<ParticipationViewModel> participationViewModels001X = await GetParticipationViewModelsClassic();
+            stopwatch.Stop();
+            long elapsedPrepare001X = stopwatch.ElapsedMilliseconds;
+            stopwatch.Reset();
+            stopwatch.Start();
+            String html001X = await this.RenderViewAsync<List<ParticipationViewModel>>("ParticipationsIndexClassic", participationViewModels001X);
+            stopwatch.Stop();
+            long elapsedView001X = stopwatch.ElapsedMilliseconds;
+            stopwatch.Reset();
+            stringBuilder.Append("Elapsed at classic prepare: " + elapsedPrepare001X + ", at making view: " + elapsedView001X + ", html size: " + html001X.Length + "\n");
+
+            stopwatch.Start();
+            List<ParticipationViewModel> participationViewModels001 = null;
+            for (int i = 0; i < 100; i++)
+            {
+                participationViewModels001 = await GetParticipationViewModelsClassic();
+            }
+            stopwatch.Stop();
+            long elapsedPrepare001 = stopwatch.ElapsedMilliseconds / 100;
+            stopwatch.Reset();
+
+            String html001 = null;
+            stopwatch.Start();
+            for (int i = 0; i < 10; i++)
+            {
+                html001 = await this.RenderViewAsync<List<ParticipationViewModel>>("ParticipationsIndexClassic", participationViewModels001);
+                //html001 = "test";
+            }
+            stopwatch.Stop();
+            long elapsedView001 = stopwatch.ElapsedMilliseconds / 10;
+            stopwatch.Reset();
+
+            stringBuilder.Append("Approx elapsed at classic prepare: " + elapsedPrepare001 + ", at making view: " + elapsedView001 + ", html size: " + html001.Length + "\n");
+
+            stringBuilder.Append("Finished");
+
+            return stringBuilder.ToString();
+        }
+
+        public async Task<String> PerformFullTestTwo()
         {
             //WARM UP
             List<User> users = await _context.Users.ToListAsync();
@@ -146,7 +195,7 @@ namespace PerformanceTesterCSS.Controllers
             long elapsedView004 = stopwatch.ElapsedMilliseconds / 10;
             stopwatch.Reset();
 
-            stringBuilder.Append("Approx elapsed at prepare at with signle retreieve: " + elapsedPrepare004 + ", at making view: " + elapsedView004 + ", html size: " + html004.Length + "\n");
+            stringBuilder.Append("Approx elapsed at prepare at with single retrieve: " + elapsedPrepare004 + ", at making view: " + elapsedView004 + ", html size: " + html004.Length + "\n");
 
             stringBuilder.Append("Finished");
 
