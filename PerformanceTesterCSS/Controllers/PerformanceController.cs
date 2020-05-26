@@ -27,6 +27,12 @@ namespace PerformanceTesterCSS.Controllers
 
         public async Task<String> PerformFullTest()
         {
+            //WARM UP
+            List<User> users = await _context.Users.ToListAsync();
+            List<Season> seasons = await _context.Seasons.ToListAsync();
+            List<Participation> participations = await _context.Participations.ToListAsync();
+            //List<Participation> participations = await _context.Participations.Include(p => p.Season).Include(p => p.User).ToListAsync();
+
             StringBuilder stringBuilder = new StringBuilder();
             stringBuilder.Append("Full test:\n");
             Stopwatch stopwatch = new Stopwatch();
@@ -38,17 +44,74 @@ namespace PerformanceTesterCSS.Controllers
             stopwatch.Reset();*/
 
             stopwatch.Start();
-            List<ParticipationViewModel> participationViewModels002 = await GetParticipationViewModelsWithSearch();
-            String html002 = await this.RenderViewAsync<List<ParticipationViewModel>>("ParticipationsIndexWithSearch", participationViewModels002);
-            stringBuilder.Append("Elapsed total at with search: " + stopwatch.ElapsedMilliseconds + " html size " + html002.Length + "\n");
+            List<ParticipationViewModel> participationViewModels002X = await GetParticipationViewModelsWithSearch();
+            stopwatch.Stop();
+            long elapsedPrepare002X = stopwatch.ElapsedMilliseconds;
             stopwatch.Reset();
+            stopwatch.Start();
+            String html002X = await this.RenderViewAsync<List<ParticipationViewModel>>("ParticipationsIndexWithSearch", participationViewModels002X);
+            stopwatch.Stop();
+            long elapsedView002X = stopwatch.ElapsedMilliseconds;
+            stopwatch.Reset();
+            stringBuilder.Append("Elapsed at prepare at with search: " + elapsedPrepare002X + ", at making view: " + elapsedView002X + ", html size: " + html002X.Length + "\n");
 
             stopwatch.Start();
-            List<ParticipationViewModel> participationViewModels003 = await GetParticipationViewModelsWithDictionarySearch();
-            String html003 = await this.RenderViewAsync<List<ParticipationViewModel>>("ParticipationsIndexWithDictionarySearch", participationViewModels003);
+            List<ParticipationViewModel> participationViewModels003X = await GetParticipationViewModelsWithDictionarySearch();
             stopwatch.Stop();
-            stringBuilder.Append("Elapsed total at with search: " + stopwatch.ElapsedMilliseconds + " html size " + html003.Length + "\n");
+            long elapsedPrepare003X = stopwatch.ElapsedMilliseconds;
             stopwatch.Reset();
+            stopwatch.Start();
+            String html003X = await this.RenderViewAsync<List<ParticipationViewModel>>("ParticipationsIndexWithDictionarySearch", participationViewModels003X);
+            stopwatch.Stop();
+            long elapsedView003X = stopwatch.ElapsedMilliseconds;
+            stopwatch.Reset();
+            stringBuilder.Append("Elapsed at prepare at with dictionary search: " + elapsedPrepare003X + ", at making view: " + elapsedView003X + ", html size: " + html003X.Length + "\n");
+
+            stopwatch.Start();
+            List<ParticipationViewModel> participationViewModels002 = null;
+            for (int i = 0; i < 100; i++)
+            {
+                participationViewModels002 = await GetParticipationViewModelsWithSearch();
+            }
+            stopwatch.Stop();
+            long elapsedPrepare002 = stopwatch.ElapsedMilliseconds / 100;
+            stopwatch.Reset();
+
+            String html002 = null;
+            stopwatch.Start();
+            for (int i = 0; i < 10; i++)
+            {
+                html002 = await this.RenderViewAsync<List<ParticipationViewModel>>("ParticipationsIndexWithSearch", participationViewModels002);
+                //html002 = "test";
+            }
+            stopwatch.Stop();
+            long elapsedView002 = stopwatch.ElapsedMilliseconds / 10;
+            stopwatch.Reset();
+
+            stringBuilder.Append("Approx elapsed at prepare at with search: " + elapsedPrepare002 + ", at making view: " + elapsedView002 + ", html size: " + html002.Length + "\n");
+
+            stopwatch.Start();
+            List<ParticipationViewModel> participationViewModels003 = null;
+            for (int i = 0; i < 100; i++)
+            {
+                participationViewModels003 = await GetParticipationViewModelsWithDictionarySearch();
+            }
+            stopwatch.Stop();
+            long elapsedPrepare003 = stopwatch.ElapsedMilliseconds / 100;
+            stopwatch.Reset();
+
+            String html003 = null;
+            stopwatch.Start();
+            for (int i = 0; i < 10; i++)
+            {
+                html003 = await this.RenderViewAsync<List<ParticipationViewModel>>("ParticipationsIndexWithDictionarySearch", participationViewModels003);
+                //html003 = "test";
+            }
+            stopwatch.Stop();
+            long elapsedView003 = stopwatch.ElapsedMilliseconds / 10;
+            stopwatch.Reset();
+
+            stringBuilder.Append("Approx elapsed at prepare at with dictionary search: " + elapsedPrepare003 + ", at making view: " + elapsedView003 + ", html size: " + html003.Length + "\n");
 
             stringBuilder.Append("Finished");
 
