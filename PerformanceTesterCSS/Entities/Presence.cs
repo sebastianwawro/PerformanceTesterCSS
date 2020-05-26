@@ -25,7 +25,7 @@ namespace PerformanceTesterCSS.Entities
         public DateTime DateCommited { get; set; }
 
         [Column("is_deleted")]
-        public Boolean IsDeleted { get; set; }
+        public Boolean? IsDeleted { get; set; }
         
     }
 }

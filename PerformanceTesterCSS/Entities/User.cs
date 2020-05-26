@@ -34,10 +34,10 @@ namespace PerformanceTesterCSS.Entities
         public String EmailConfirmCode { get; set; }
 
         [Column("email_confirm_code_sent_time")]
-        public DateTime EmailConfirmCodeSentTime { get; set; }
+        public DateTime? EmailConfirmCodeSentTime { get; set; }
 
         [Column("email_verified_at")]
-        public DateTime EmailVerifiedAt { get; set; }
+        public DateTime? EmailVerifiedAt { get; set; }
 
         [Column("phone", TypeName = "varchar(255)")]
         public String Phone { get; set; }
@@ -52,7 +52,7 @@ namespace PerformanceTesterCSS.Entities
         public String Organisation { get; set; }
 
         [Column("last_login_time")]
-        public DateTime LastLoginTime { get; set; }
+        public DateTime? LastLoginTime { get; set; }
 
         [Column("vat_id", TypeName = "varchar(2550)")]
         public String VatID { get; set; }
@@ -88,10 +88,10 @@ namespace PerformanceTesterCSS.Entities
         public DateTime? UpdatedAt { get; set; }
 
         [Column("is_deleted")]
-        public Boolean IsDeleted { get; set; }
+        public Boolean? IsDeleted { get; set; }
 
         [Column("is_encrypted")]
-        public Boolean IsEncrypted { get; set; }
+        public Boolean? IsEncrypted { get; set; }
 
     }
 }

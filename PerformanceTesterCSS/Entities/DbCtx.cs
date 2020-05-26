@@ -9,33 +9,6 @@ namespace PerformanceTesterCSS.Entities
 {
     public class DbCtx : DbContext
     {
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-            modelBuilder.Entity<User>()
-                .HasIndex(b => b.Email)
-                .IsUnique();
-
-            modelBuilder.Entity<PasswordReset>()
-                .HasNoKey();
-
-            foreach (var entityType in modelBuilder.Model.GetEntityTypes())
-            {
-                foreach (var property in entityType.GetProperties())
-                {
-                    if (property.ClrType == typeof(bool))
-                    {
-                        property.SetValueConverter(new BoolToIntConverter());
-                    }
-                }
-            }
-
-            //modelBuilder.Seed();
-        }
-
-        public DbCtx(DbContextOptions<DbCtx> options)
-            : base(options)
-        {
-        }
 
         public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<ConfigurationRecord> ConfigurationRecords { get; set; }
@@ -56,5 +29,35 @@ namespace PerformanceTesterCSS.Entities
         public virtual DbSet<Season> Seasons { get; set; }
         public virtual DbSet<ShoutboxMessage> ShoutboxMessages { get; set; }
         public virtual DbSet<UserAdminPrivileges> UserAdminPrivileges { get; set; }
+
+        public DbCtx(DbContextOptions<DbCtx> options)
+            : base(options)
+        {
+        }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<User>()
+                .HasIndex(b => b.Email)
+                .IsUnique();
+
+            modelBuilder.Entity<PasswordReset>()
+                .HasNoKey();
+
+            foreach (var entityType in modelBuilder.Model.GetEntityTypes())
+            {
+                foreach (var property in entityType.GetProperties())
+                {
+                    if (property.ClrType == typeof(bool))
+                    {
+                        property.SetValueConverter(new BoolToIntConverter());
+                    }
+                }
+            }
+
+            base.OnModelCreating(modelBuilder);
+
+            //modelBuilder.Seed();
+        }
     }
 }

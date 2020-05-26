@@ -19,7 +19,7 @@ namespace PerformanceTesterCSS.Entities
         public String Message { get; set; }
 
         [Column("is_anonymous")]
-        public Boolean IsAnonymous { get; set; }
+        public Boolean? IsAnonymous { get; set; }
 
         [Column("creation_date")]
         public DateTime? CreationDate { get; set; }
@@ -28,7 +28,7 @@ namespace PerformanceTesterCSS.Entities
         public DateTime? LastEditDate { get; set; }
 
         [Column("is_deleted")]
-        public Boolean IsDeleted { get; set; }
+        public Boolean? IsDeleted { get; set; }
 
         [ForeignKey("creator_id")]
         public virtual User Creator { get; set; }

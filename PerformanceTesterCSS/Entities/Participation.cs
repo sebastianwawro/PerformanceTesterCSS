@@ -22,10 +22,10 @@ namespace PerformanceTesterCSS.Entities
         public virtual User User { get; set; }
 
         [Column("conf_participation")]
-        public Boolean ConferenceParticipation { get; set; }
+        public Boolean? ConferenceParticipation { get; set; }
 
         [Column("paper_publication")]
-        public Boolean PaperPublication { get; set; }
+        public Boolean? PaperPublication { get; set; }
 
         [Column("creation_date")]
         public DateTime? CreationDate { get; set; }
@@ -34,7 +34,7 @@ namespace PerformanceTesterCSS.Entities
         public DateTime? LastEditDate { get; set; }
 
         [Column("is_deleted")]
-        public Boolean IsDeleted { get; set; }
+        public Boolean? IsDeleted { get; set; }
 
         [Column("created_at")]
         public DateTime? CreatedAt { get; set; }

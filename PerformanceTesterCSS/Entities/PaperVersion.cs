@@ -34,7 +34,7 @@ namespace PerformanceTesterCSS.Entities
         public DateTime? LastEditDate { get; set; }
 
         [Column("is_deleted")]
-        public Boolean IsDeleted { get; set; }
+        public Boolean? IsDeleted { get; set; }
 
         [Column("created_at")]
         public DateTime? CreatedAt { get; set; }

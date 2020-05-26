@@ -31,10 +31,10 @@ namespace PerformanceTesterCSS.Entities
         public virtual User UsedBy { get; set; }
 
         [Column("is_active")]
-        public Boolean IsActive { get; set; }
+        public Boolean? IsActive { get; set; }
 
         [Column("is_deleted")]
-        public Boolean IsDeleted { get; set; }
+        public Boolean? IsDeleted { get; set; }
 
         [Column("created_at")]
         public DateTime? CreatedAt { get; set; }

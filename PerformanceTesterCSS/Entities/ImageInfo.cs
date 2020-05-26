@@ -31,7 +31,7 @@ namespace PerformanceTesterCSS.Entities
         public DateTime? LastEditDate { get; set; }
 
         [Column("is_deleted")]
-        public Boolean IsDeleted { get; set; }
+        public Boolean? IsDeleted { get; set; }
 
         [ForeignKey("creator_id")]
         public virtual User Creator { get; set; }
