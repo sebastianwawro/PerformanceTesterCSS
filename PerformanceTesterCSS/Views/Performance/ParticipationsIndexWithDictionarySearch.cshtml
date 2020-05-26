@@ -62,3 +62,11 @@
 }
     </tbody>
 </table>
+
+@if (ViewData["Stopwatch"] != null) {
+    System.Diagnostics.Stopwatch stopwatch = (System.Diagnostics.Stopwatch)ViewData["Stopwatch"];
+    stopwatch.Stop();
+    long ela = stopwatch.ElapsedMilliseconds;
+    <p>Elapsed: @ela</p>
+}
+
