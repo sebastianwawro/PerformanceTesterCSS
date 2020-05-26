@@ -25,6 +25,6 @@ namespace PerformanceTesterCSS.Entities
         public String Token { get; set; }
 
         [Column("created_at")]
-        public DateTime CreatedAt { get; set; }
+        public DateTime? CreatedAt { get; set; }
     }
 }

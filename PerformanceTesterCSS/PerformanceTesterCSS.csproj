@@ -5,18 +5,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Entities\ConfigurationRecord.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Folder Include="ViewModels\" />
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="Entities\ConfigurationRecord.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
+    <PackageReference Include="BCrypt-Official" Version="0.1.109" />
     <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="3.1.1" />
     <PackageReference Include="Pomelo.EntityFrameworkCore.MySql.Design" Version="1.1.2" />
   </ItemGroup>

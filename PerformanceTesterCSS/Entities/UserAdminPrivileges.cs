@@ -70,18 +70,18 @@ namespace PerformanceTesterCSS.Entities
         public Boolean CanPurgeAdmin { get; set; }
 
         [Column("creation_date")]
-        public DateTime CreationDate { get; set; }
+        public DateTime? CreationDate { get; set; }
 
         [Column("last_edit_date")]
-        public DateTime LastEditDate { get; set; }
+        public DateTime? LastEditDate { get; set; }
 
         [Column("is_deleted")]
         public Boolean IsDeleted { get; set; }
 
         [Column("created_at")]
-        public DateTime CreatedAt { get; set; }
+        public DateTime? CreatedAt { get; set; }
 
         [Column("updated_at")]
-        public DateTime UpdatedAt { get; set; }
+        public DateTime? UpdatedAt { get; set; }
     }
 }

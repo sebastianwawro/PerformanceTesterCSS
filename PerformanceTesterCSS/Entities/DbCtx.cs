@@ -15,6 +15,9 @@ namespace PerformanceTesterCSS.Entities
                 .HasIndex(b => b.Email)
                 .IsUnique();
 
+            modelBuilder.Entity<PasswordReset>()
+                .HasNoKey();
+
             foreach (var entityType in modelBuilder.Model.GetEntityTypes())
             {
                 foreach (var property in entityType.GetProperties())
