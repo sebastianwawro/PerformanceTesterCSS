@@ -16,10 +16,20 @@ namespace PerformanceTesterCSS.Entities
         public Int64 Id { get; set; }
 
         [ForeignKey("season_id")]
+        //[NotMapped]
         public virtual Season Season { get; set; }
 
+        //[Column("season_id")]
+        [NotMapped]
+        public Int32 SeasonId { get; set; }
+
         [ForeignKey("user_id")]
+        //[NotMapped]
         public virtual User User { get; set; }
+
+        //[Column("user_id")]
+        [NotMapped]
+        public Int32 UserId { get; set; }
 
         [Column("conf_participation")]
         public Boolean? ConferenceParticipation { get; set; }

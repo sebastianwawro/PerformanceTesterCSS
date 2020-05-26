@@ -54,6 +54,9 @@ namespace PerformanceTesterCSS.Entities
         [Column("last_login_time")]
         public DateTime? LastLoginTime { get; set; }
 
+        [Column("degree", TypeName = "varchar(255)")]
+        public String Degree { get; set; }
+
         [Column("vat_id", TypeName = "varchar(2550)")]
         public String VatID { get; set; }
 

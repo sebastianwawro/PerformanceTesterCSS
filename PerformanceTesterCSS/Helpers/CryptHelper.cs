@@ -12,5 +12,9 @@ namespace PerformanceTesterCSS.Helpers
             String altHash = "$2a" + hash.Substring(3);
             return BCrypt.Net.BCrypt.Verify(pass, altHash);
         }
+        public static String HashPassowrd(String pass)
+        {
+            return BCrypt.Net.BCrypt.HashPassword(pass);
+        }
     }
 }

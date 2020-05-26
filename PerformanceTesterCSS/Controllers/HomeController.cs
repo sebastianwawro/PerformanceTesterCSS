@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using PerformanceTesterCSS.Entities;
 using PerformanceTesterCSS.Helpers;
@@ -103,6 +104,90 @@ namespace PerformanceTesterCSS.Controllers
             stringBuilder.Append("Finished");
 
             return stringBuilder.ToString();
+
+        }
+
+        public async Task<string> MakeRandomUsersAsync()
+        {
+            List<User> users = new List<User>();
+            for(int i=1; i<=1000; i++)
+            {
+                users.Add(new User
+                {
+                    Username = "username" + i,
+                    FirstName = "firstname" + i,
+                    LastName = "lastname" + i,
+                    Degree = "nodegree",
+                    Password = CryptHelper.HashPassowrd("password" + i),
+                    Email = "user" + i + "@email.pl",
+                    CreatedAt = DateTime.Now,
+                    UpdatedAt = DateTime.Now,
+                    Roles = "participant;",
+                    AccessFailedCount = 0,
+                    IsDeleted = false,
+                    IsEncrypted = false
+                });
+            }
+            await _context.Users.AddRangeAsync(users);
+            await _context.SaveChangesAsync();
+
+            return "Done";
+
+        }
+
+        public async Task<string> MakeRandomSeasonsAsync()
+        {
+            List<Season> seasons = new List<Season>();
+            for (int i = 1; i <= 1000; i++)
+            {
+                seasons.Add(new Season
+                {
+                    Name = "seasonname" + i,
+                    RegStartDate = DateTime.Now,
+                    RegEndDate = DateTime.Now,
+                    ConfStartDate = DateTime.Now,
+                    ConfEndDate = DateTime.Now,
+                    EditionNumber = "edition" + i,
+                    IsDeleted = false,
+                    Location = "PL",
+                    MainImageFilename = "testing" + i + ".img",
+                    CreatedAt = DateTime.Now,
+                    UpdatedAt = DateTime.Now
+                });
+            }
+            await _context.Seasons.AddRangeAsync(seasons);
+            await _context.SaveChangesAsync();
+
+            return "Done";
+
+        }
+
+        public async Task<string> MakeRandomParticipationsAsync()
+        {
+            List<User> users = await _context.Users.Where(p => p.Username.Contains("username")).ToListAsync();
+            List<Season> seasons = await _context.Seasons.Where(p => p.Name.Contains("seasonname")).ToListAsync();
+
+            List<Participation> participations = new List<Participation>();
+            foreach(User user in users)
+            {
+                foreach(Season season in seasons)
+                {
+                    participations.Add(new Participation
+                    {
+                        User = user,
+                        Season = season,
+                        ConferenceParticipation = true,
+                        PaperPublication = true,
+                        IsDeleted = false,
+                        CreatedAt = DateTime.Now,
+                        UpdatedAt = DateTime.Now
+                    });
+                }
+            }
+            await _context.Participations.AddRangeAsync(participations);
+            await _context.SaveChangesAsync();
+
+            return "Done";
 
         }
     }
