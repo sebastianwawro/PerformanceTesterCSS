@@ -110,7 +110,7 @@ namespace PerformanceTesterCSS.Controllers
         public async Task<string> MakeRandomUsersAsync()
         {
             List<User> users = new List<User>();
-            for(int i=1; i<=1000; i++)
+            for(int i=1; i<=100; i++)
             {
                 users.Add(new User
                 {
@@ -138,7 +138,7 @@ namespace PerformanceTesterCSS.Controllers
         public async Task<string> MakeRandomSeasonsAsync()
         {
             List<Season> seasons = new List<Season>();
-            for (int i = 1; i <= 1000; i++)
+            for (int i = 1; i <= 100; i++)
             {
                 seasons.Add(new Season
                 {
@@ -189,6 +189,24 @@ namespace PerformanceTesterCSS.Controllers
 
             return "Done";
 
+        }
+
+        public async Task<string> InitiatizeDatabase()
+        {
+            /*_context.Seasons.RemoveRange(await _context.Seasons.ToListAsync());
+            await _context.SaveChangesAsync();
+
+            _context.Users.RemoveRange(await _context.Users.ToListAsync());
+            await _context.SaveChangesAsync();
+
+            _context.Participations.RemoveRange(await _context.Participations.ToListAsync());
+            await _context.SaveChangesAsync();*/
+
+            await MakeRandomUsersAsync();
+            await MakeRandomSeasonsAsync();
+            await MakeRandomParticipationsAsync();
+
+            return "Done";
         }
     }
 }
