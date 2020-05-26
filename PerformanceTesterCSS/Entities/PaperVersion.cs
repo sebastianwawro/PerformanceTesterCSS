@@ -7,7 +7,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace PerformanceTesterCSS.Entities
 {
-    [Table("paper_verions")]
+    [Table("paper_versions")]
     public class PaperVersion
     {
         [Key]

@@ -22,7 +22,7 @@ namespace PerformanceTesterCSS.Entities
         public String Title { get; set; }
 
         [Column("sent_to_print_date")]
-        public DateTime SentToPrintDate { get; set; }
+        public DateTime? SentToPrintDate { get; set; }
 
         [Column("status")]
         public Int32 Status { get; set; }

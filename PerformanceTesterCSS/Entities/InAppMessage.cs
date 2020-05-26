@@ -28,13 +28,13 @@ namespace PerformanceTesterCSS.Entities
         public String MessageContent { get; set; }
 
         [Column("is_opened")]
-        public DateTime IsOpened { get; set; }
+        public Boolean? IsOpened { get; set; }
 
         [Column("is_deleted_for_broadcaster")]
-        public DateTime IsDeletedForBroadcaster { get; set; }
+        public Boolean? IsDeletedForBroadcaster { get; set; }
 
         [Column("is_deleted_for_receiver")]
-        public DateTime IsDeletedForReceiver { get; set; }
+        public Boolean? IsDeletedForReceiver { get; set; }
 
         [Column("created_at")]
         public DateTime? CreatedAt { get; set; }
