@@ -106,13 +106,19 @@ namespace PerformanceTesterCSS.Controllers
             stringBuilder.Append("Elapsed total at classic: " + stopwatch.ElapsedMilliseconds + "\n");
             stopwatch.Reset();*/
 
-            await SingleTestWithSearch(stopwatch, stringBuilder);
-            await SingleTestWithDictionarySearch(stopwatch, stringBuilder);
-            await SingleTestWithSingleRetrieve(stopwatch, stringBuilder);
+            //await SingleTestWithSearch(stopwatch, stringBuilder);
+            //await SingleTestWithDictionarySearch(stopwatch, stringBuilder);
+            //await SingleTestWithSingleRetrieve(stopwatch, stringBuilder);
+            //await SingleTestWithNothing(stopwatch, stringBuilder);
+            //await SingleTestForEachConf(stopwatch, stringBuilder);
+            //await SingleTestForEachConfAlt(stopwatch, stringBuilder);
 
-            await MultiTestWithSearch(stopwatch, stringBuilder);
-            await MultiTestWithDictionarySearch(stopwatch, stringBuilder);
-            await MultiTestWithSingleRetrieve(stopwatch, stringBuilder);
+            //await MultiTestWithSearch(stopwatch, stringBuilder);
+            //await MultiTestWithDictionarySearch(stopwatch, stringBuilder);
+            //await MultiTestWithSingleRetrieve(stopwatch, stringBuilder);
+            await MultiTestWithNothing(stopwatch, stringBuilder);
+            await MultiTestForEachConf(stopwatch, stringBuilder);
+            await MultiTestForEachConfAlt(stopwatch, stringBuilder);
 
             stringBuilder.Append("Finished");
 
@@ -336,7 +342,7 @@ namespace PerformanceTesterCSS.Controllers
             long elapsedView = stopwatch.ElapsedMilliseconds / 10;
             stopwatch.Reset();
 
-            stringBuilder.Append("Approx elapsed at prepare at with nothing: " + elapsedPrepare + ", at making view: " + elapsedView + ", html size: " + html.Length + "\n");
+            stringBuilder.Append("Approx elapsed at prepare at for each conf: " + elapsedPrepare + ", at making view: " + elapsedView + ", html size: " + html.Length + "\n");
         }
 
         public async Task MultiTestForEachConfAlt(Stopwatch stopwatch, StringBuilder stringBuilder)
@@ -362,7 +368,7 @@ namespace PerformanceTesterCSS.Controllers
             long elapsedView = stopwatch.ElapsedMilliseconds / 10;
             stopwatch.Reset();
 
-            stringBuilder.Append("Approx elapsed at prepare at with nothing: " + elapsedPrepare + ", at making view: " + elapsedView + ", html size: " + html.Length + "\n");
+            stringBuilder.Append("Approx elapsed at prepare at for each conf alt: " + elapsedPrepare + ", at making view: " + elapsedView + ", html size: " + html.Length + "\n");
         }
 
         private async Task<List<ParticipationViewModel>> GetParticipationViewModelsClassic()
