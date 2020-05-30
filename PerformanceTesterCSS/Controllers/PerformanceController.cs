@@ -10,7 +10,6 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using PerformanceTesterCSS.Helpers;
 
 namespace PerformanceTesterCSS.Controllers
 {
@@ -34,6 +33,16 @@ namespace PerformanceTesterCSS.Controllers
             stringBuilder.Append("Full test:\n");
             Stopwatch stopwatch = new Stopwatch();
 
+            await SingleTestClassic(stopwatch, stringBuilder);
+            await MultiTestClassic(stopwatch, stringBuilder);
+
+            stringBuilder.Append("Finished");
+
+            return stringBuilder.ToString();
+        }
+
+        public async Task SingleTestClassic(Stopwatch stopwatch, StringBuilder stringBuilder)
+        {
             stopwatch.Start();
             List<ParticipationViewModel> participationViewModels001X = await GetParticipationViewModelsClassic();
             stopwatch.Stop();
@@ -46,6 +55,10 @@ namespace PerformanceTesterCSS.Controllers
             stopwatch.Reset();
             stringBuilder.Append("Elapsed at classic prepare: " + elapsedPrepare001X + ", at making view: " + elapsedView001X + ", html size: " + html001X.Length + "\n");
 
+        }
+
+        public async Task MultiTestClassic(Stopwatch stopwatch, StringBuilder stringBuilder)
+        {
             stopwatch.Start();
             List<ParticipationViewModel> participationViewModels001 = null;
             for (int i = 0; i < 100; i++)
@@ -68,10 +81,11 @@ namespace PerformanceTesterCSS.Controllers
             stopwatch.Reset();
 
             stringBuilder.Append("Approx elapsed at classic prepare: " + elapsedPrepare001 + ", at making view: " + elapsedView001 + ", html size: " + html001.Length + "\n");
+        }
 
-            stringBuilder.Append("Finished");
+        public async Task SingleTestClassicCPY(Stopwatch stopwatch, StringBuilder stringBuilder)
+        {
 
-            return stringBuilder.ToString();
         }
 
         public async Task<String> PerformFullTestTwo()
@@ -92,6 +106,21 @@ namespace PerformanceTesterCSS.Controllers
             stringBuilder.Append("Elapsed total at classic: " + stopwatch.ElapsedMilliseconds + "\n");
             stopwatch.Reset();*/
 
+            await SingleTestWithSearch(stopwatch, stringBuilder);
+            await SingleTestWithDictionarySearch(stopwatch, stringBuilder);
+            await SingleTestWithSingleRetrieve(stopwatch, stringBuilder);
+
+            await MultiTestWithSearch(stopwatch, stringBuilder);
+            await MultiTestWithDictionarySearch(stopwatch, stringBuilder);
+            await MultiTestWithSingleRetrieve(stopwatch, stringBuilder);
+
+            stringBuilder.Append("Finished");
+
+            return stringBuilder.ToString();
+        }
+
+        public async Task SingleTestWithSearch(Stopwatch stopwatch, StringBuilder stringBuilder)
+        {
             stopwatch.Start();
             List<ParticipationViewModel> participationViewModels002X = await GetParticipationViewModelsWithSearch();
             stopwatch.Stop();
@@ -103,7 +132,10 @@ namespace PerformanceTesterCSS.Controllers
             long elapsedView002X = stopwatch.ElapsedMilliseconds;
             stopwatch.Reset();
             stringBuilder.Append("Elapsed at prepare at with search: " + elapsedPrepare002X + ", at making view: " + elapsedView002X + ", html size: " + html002X.Length + "\n");
+        }
 
+        public async Task SingleTestWithDictionarySearch(Stopwatch stopwatch, StringBuilder stringBuilder)
+        {
             stopwatch.Start();
             List<ParticipationViewModel> participationViewModels003X = await GetParticipationViewModelsWithDictionarySearch();
             stopwatch.Stop();
@@ -115,7 +147,10 @@ namespace PerformanceTesterCSS.Controllers
             long elapsedView003X = stopwatch.ElapsedMilliseconds;
             stopwatch.Reset();
             stringBuilder.Append("Elapsed at prepare at with dictionary search: " + elapsedPrepare003X + ", at making view: " + elapsedView003X + ", html size: " + html003X.Length + "\n");
+        }
 
+        public async Task SingleTestWithSingleRetrieve(Stopwatch stopwatch, StringBuilder stringBuilder)
+        {
             stopwatch.Start();
             List<ParticipationViewModel> participationViewModels004X = await GetParticipationViewModelsWithSingleRetrieve();
             stopwatch.Stop();
@@ -127,7 +162,10 @@ namespace PerformanceTesterCSS.Controllers
             long elapsedView004X = stopwatch.ElapsedMilliseconds;
             stopwatch.Reset();
             stringBuilder.Append("Elapsed at prepare at with single retrieve: " + elapsedPrepare004X + ", at making view: " + elapsedView004X + ", html size: " + html004X.Length + "\n");
+        }
 
+        public async Task MultiTestWithSearch(Stopwatch stopwatch, StringBuilder stringBuilder)
+        {
             stopwatch.Start();
             List<ParticipationViewModel> participationViewModels002 = null;
             for (int i = 0; i < 100; i++)
@@ -150,7 +188,10 @@ namespace PerformanceTesterCSS.Controllers
             stopwatch.Reset();
 
             stringBuilder.Append("Approx elapsed at prepare at with search: " + elapsedPrepare002 + ", at making view: " + elapsedView002 + ", html size: " + html002.Length + "\n");
+        }
 
+        public async Task MultiTestWithDictionarySearch(Stopwatch stopwatch, StringBuilder stringBuilder)
+        {
             stopwatch.Start();
             List<ParticipationViewModel> participationViewModels003 = null;
             for (int i = 0; i < 100; i++)
@@ -173,7 +214,10 @@ namespace PerformanceTesterCSS.Controllers
             stopwatch.Reset();
 
             stringBuilder.Append("Approx elapsed at prepare at with dictionary search: " + elapsedPrepare003 + ", at making view: " + elapsedView003 + ", html size: " + html003.Length + "\n");
+        }
 
+        public async Task MultiTestWithSingleRetrieve(Stopwatch stopwatch, StringBuilder stringBuilder)
+        {
             stopwatch.Start();
             List<ParticipationViewModel> participationViewModels004 = null;
             for (int i = 0; i < 100; i++)
@@ -188,7 +232,7 @@ namespace PerformanceTesterCSS.Controllers
             stopwatch.Start();
             for (int i = 0; i < 10; i++)
             {
-                html004 = await this.RenderViewAsync<List<ParticipationViewModel>>("ParticipationsIndexWithSingleRetrieve", participationViewModels004X);
+                html004 = await this.RenderViewAsync<List<ParticipationViewModel>>("ParticipationsIndexWithSingleRetrieve", participationViewModels004);
                 //html004 = "test";
             }
             stopwatch.Stop();
@@ -196,10 +240,6 @@ namespace PerformanceTesterCSS.Controllers
             stopwatch.Reset();
 
             stringBuilder.Append("Approx elapsed at prepare at with single retrieve: " + elapsedPrepare004 + ", at making view: " + elapsedView004 + ", html size: " + html004.Length + "\n");
-
-            stringBuilder.Append("Finished");
-
-            return stringBuilder.ToString();
         }
 
         private async Task<List<ParticipationViewModel>> GetParticipationViewModelsClassic()
