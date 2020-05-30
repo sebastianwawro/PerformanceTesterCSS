@@ -1,0 +1,79 @@
+﻿@model IEnumerable<PerformanceTesterCSS.ViewModels.Performance.SeasonEachConfViewModel>
+
+@{
+    ViewData["Title"] = "Participations Index For Each Conference";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Participations Index For Each Conference</h1>
+
+<p>
+    @Html.Raw(ViewData["Info"])
+</p>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Season)
+            </th>
+            <th>Participations</th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Season)
+            </td>
+            <td>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>
+                                Id
+                            </th>
+                            <th>
+                                User
+                            </th>
+                            <th>
+                                ConfPart
+                            </th>
+                            <th>
+                                PaperPub
+                            </th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var part in item.Participations) {
+                                <tr>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => part.Id)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => part.User)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => part.ConfPart)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => part.PaperPub)
+                                    </td>
+                                    <td>
+                                        @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+                                        @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
+                                        @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+                                    </td>
+                                </tr>
+                        }
+                    </tbody>
+                </table>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

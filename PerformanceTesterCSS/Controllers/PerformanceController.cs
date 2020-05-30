@@ -336,6 +336,90 @@ namespace PerformanceTesterCSS.Controllers
             return participationViewModels;
         }
 
+        private async Task<List<ParticipationViewModel>> GetParticipationViewModelsWithNothing()
+        {
+            List<Participation> participations = await _context.Participations.ToListAsync();
+            List<ParticipationViewModel> participationViewModels = new List<ParticipationViewModel>();
+
+            foreach (Participation part in participations)
+            {
+                participationViewModels.Add(new ParticipationViewModel
+                {
+                    Id = part.Id,
+                    User = "not-loaded",
+                    Season = "not-loaded",
+                    ConfPart = part.ConferenceParticipation.GetValueOrDefault(),
+                    PaperPub = part.PaperPublication.GetValueOrDefault()
+                });
+            }
+
+            return participationViewModels;
+        }
+
+        private async Task<List<SeasonEachConfViewModel>> GetParticipationViewModelsForEachConference()
+        {
+            List<Season> seasons = await _context.Seasons.ToListAsync();
+            List<SeasonEachConfViewModel> seasonEachConfViewModels = new List<SeasonEachConfViewModel>();
+
+            foreach (Season season in seasons)
+            {
+                List<Participation> participations = await _context.Participations.Where(p => p.Season.Equals(season)).ToListAsync();
+                List<PartEachConfViewModel> partEachConfViewModels = new List<PartEachConfViewModel>();
+
+                foreach(Participation part in participations)
+                {
+                    await _context.Entry(part).Reference(p => p.User).LoadAsync();
+                    partEachConfViewModels.Add(new PartEachConfViewModel
+                    {
+                        Id = part.Id,
+                        User = part.User.Degree + " " + part.User.FirstName + " " + part.User.LastName,
+                        ConfPart = part.ConferenceParticipation.GetValueOrDefault(),
+                        PaperPub = part.PaperPublication.GetValueOrDefault()
+                    });
+                }
+
+                seasonEachConfViewModels.Add(new SeasonEachConfViewModel
+                {
+                    Season = season.Name + " " + season.EditionNumber,
+                    Participations = partEachConfViewModels
+                });
+            }
+
+            return seasonEachConfViewModels;
+        }
+
+        private async Task<List<SeasonEachConfViewModel>> GetParticipationViewModelsForEachConferenceAlternative()
+        {
+            List<Season> seasons = await _context.Seasons.Include(p => p.Participations).ToListAsync();
+            List<SeasonEachConfViewModel> seasonEachConfViewModels = new List<SeasonEachConfViewModel>();
+
+            foreach (Season season in seasons)
+            {
+                //List<Participation> participations = await _context.Participations.Where(p => p.Season.Equals(season)).ToListAsync();
+                List<PartEachConfViewModel> partEachConfViewModels = new List<PartEachConfViewModel>();
+
+                foreach (Participation part in season.Participations)
+                {
+                    await _context.Entry(part).Reference(p => p.User).LoadAsync();
+                    partEachConfViewModels.Add(new PartEachConfViewModel
+                    {
+                        Id = part.Id,
+                        User = part.User.Degree + " " + part.User.FirstName + " " + part.User.LastName,
+                        ConfPart = part.ConferenceParticipation.GetValueOrDefault(),
+                        PaperPub = part.PaperPublication.GetValueOrDefault()
+                    });
+                }
+
+                seasonEachConfViewModels.Add(new SeasonEachConfViewModel
+                {
+                    Season = season.Name + " " + season.EditionNumber,
+                    Participations = partEachConfViewModels
+                });
+            }
+
+            return seasonEachConfViewModels;
+        }
+
         public async Task<IActionResult> ParticipationsIndexClassic()
         {
             long elapsedPrepare = 0;
@@ -476,6 +560,63 @@ namespace PerformanceTesterCSS.Controllers
             ViewData["Stopwatch"] = stopwatch;
 
             return View(participationViewModels);
+        }
+
+        public async Task<IActionResult> ParticipationsIndexWithNothing()
+        {
+            long elapsedPrepare = 0;
+            Stopwatch stopwatch = new Stopwatch();
+            stopwatch.Start();
+
+            List<ParticipationViewModel> participationViewModels = await GetParticipationViewModelsWithNothing();
+
+            stopwatch.Stop();
+            elapsedPrepare = stopwatch.ElapsedMilliseconds;
+            stopwatch.Reset();
+
+            ViewData["Info"] = "Elapsed at preparing: " + elapsedPrepare + "<br>";
+            stopwatch.Start();
+            ViewData["Stopwatch"] = stopwatch;
+
+            return View(participationViewModels);
+        }
+
+        public async Task<IActionResult> ParticipationsIndexForEachConf()
+        {
+            long elapsedPrepare = 0;
+            Stopwatch stopwatch = new Stopwatch();
+            stopwatch.Start();
+
+            List<SeasonEachConfViewModel> viewModels = await GetParticipationViewModelsForEachConference();
+
+            stopwatch.Stop();
+            elapsedPrepare = stopwatch.ElapsedMilliseconds;
+            stopwatch.Reset();
+
+            ViewData["Info"] = "Elapsed at preparing: " + elapsedPrepare + "<br>";
+            stopwatch.Start();
+            ViewData["Stopwatch"] = stopwatch;
+
+            return View(viewModels);
+        }
+
+        public async Task<IActionResult> ParticipationsIndexForEachConfAlt()
+        {
+            long elapsedPrepare = 0;
+            Stopwatch stopwatch = new Stopwatch();
+            stopwatch.Start();
+
+            List<SeasonEachConfViewModel> viewModels = await GetParticipationViewModelsForEachConferenceAlternative();
+
+            stopwatch.Stop();
+            elapsedPrepare = stopwatch.ElapsedMilliseconds;
+            stopwatch.Reset();
+
+            ViewData["Info"] = "Elapsed at preparing: " + elapsedPrepare + "<br>";
+            stopwatch.Start();
+            ViewData["Stopwatch"] = stopwatch;
+
+            return View(viewModels);
         }
     }
 }

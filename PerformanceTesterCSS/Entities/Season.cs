@@ -53,5 +53,7 @@ namespace PerformanceTesterCSS.Entities
 
         [Column("updated_at")]
         public DateTime? UpdatedAt { get; set; }
+
+        public virtual List<Participation> Participations { get; set; }
     }
 }
