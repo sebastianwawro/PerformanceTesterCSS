@@ -106,16 +106,16 @@ namespace PerformanceTesterCSS.Controllers
             stringBuilder.Append("Elapsed total at classic: " + stopwatch.ElapsedMilliseconds + "\n");
             stopwatch.Reset();*/
 
-            //await SingleTestWithSearch(stopwatch, stringBuilder);
-            //await SingleTestWithDictionarySearch(stopwatch, stringBuilder);
-            //await SingleTestWithSingleRetrieve(stopwatch, stringBuilder);
-            //await SingleTestWithNothing(stopwatch, stringBuilder);
-            //await SingleTestForEachConf(stopwatch, stringBuilder);
-            //await SingleTestForEachConfAlt(stopwatch, stringBuilder);
+            await SingleTestWithSearch(stopwatch, stringBuilder);
+            await SingleTestWithDictionarySearch(stopwatch, stringBuilder);
+            await SingleTestWithSingleRetrieve(stopwatch, stringBuilder);
+            await SingleTestWithNothing(stopwatch, stringBuilder);
+            await SingleTestForEachConf(stopwatch, stringBuilder);
+            await SingleTestForEachConfAlt(stopwatch, stringBuilder);
 
-            //await MultiTestWithSearch(stopwatch, stringBuilder);
-            //await MultiTestWithDictionarySearch(stopwatch, stringBuilder);
-            //await MultiTestWithSingleRetrieve(stopwatch, stringBuilder);
+            await MultiTestWithSearch(stopwatch, stringBuilder);
+            await MultiTestWithDictionarySearch(stopwatch, stringBuilder);
+            await MultiTestWithSingleRetrieve(stopwatch, stringBuilder);
             await MultiTestWithNothing(stopwatch, stringBuilder);
             await MultiTestForEachConf(stopwatch, stringBuilder);
             await MultiTestForEachConfAlt(stopwatch, stringBuilder);
