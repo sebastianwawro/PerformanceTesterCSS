@@ -164,6 +164,51 @@ namespace PerformanceTesterCSS.Controllers
             stringBuilder.Append("Elapsed at prepare at with single retrieve: " + elapsedPrepare004X + ", at making view: " + elapsedView004X + ", html size: " + html004X.Length + "\n");
         }
 
+        public async Task SingleTestWithNothing(Stopwatch stopwatch, StringBuilder stringBuilder)
+        {
+            stopwatch.Start();
+            List<ParticipationViewModel> participationViewModels = await GetParticipationViewModelsWithNothing();
+            stopwatch.Stop();
+            long elapsedPrepare = stopwatch.ElapsedMilliseconds;
+            stopwatch.Reset();
+            stopwatch.Start();
+            String html = await this.RenderViewAsync<List<ParticipationViewModel>>("ParticipationsIndexWithNothing", participationViewModels);
+            stopwatch.Stop();
+            long elapsedView = stopwatch.ElapsedMilliseconds;
+            stopwatch.Reset();
+            stringBuilder.Append("Elapsed at prepare at with nothing: " + elapsedPrepare + ", at making view: " + elapsedView + ", html size: " + html.Length + "\n");
+        }
+
+        public async Task SingleTestForEachConf(Stopwatch stopwatch, StringBuilder stringBuilder)
+        {
+            stopwatch.Start();
+            List<SeasonEachConfViewModel> seasonEachConfViewModels = await GetParticipationViewModelsForEachConference();
+            stopwatch.Stop();
+            long elapsedPrepare = stopwatch.ElapsedMilliseconds;
+            stopwatch.Reset();
+            stopwatch.Start();
+            String html = await this.RenderViewAsync<List<SeasonEachConfViewModel>>("ParticipationsIndexForEachConf", seasonEachConfViewModels);
+            stopwatch.Stop();
+            long elapsedView = stopwatch.ElapsedMilliseconds;
+            stopwatch.Reset();
+            stringBuilder.Append("Elapsed at prepare at for each conf: " + elapsedPrepare + ", at making view: " + elapsedView + ", html size: " + html.Length + "\n");
+        }
+
+        public async Task SingleTestForEachConfAlt(Stopwatch stopwatch, StringBuilder stringBuilder)
+        {
+            stopwatch.Start();
+            List<SeasonEachConfViewModel> seasonEachConfViewModels = await GetParticipationViewModelsForEachConferenceAlternative();
+            stopwatch.Stop();
+            long elapsedPrepare = stopwatch.ElapsedMilliseconds;
+            stopwatch.Reset();
+            stopwatch.Start();
+            String html = await this.RenderViewAsync<List<SeasonEachConfViewModel>>("ParticipationsIndexForEachConfAlt", seasonEachConfViewModels);
+            stopwatch.Stop();
+            long elapsedView = stopwatch.ElapsedMilliseconds;
+            stopwatch.Reset();
+            stringBuilder.Append("Elapsed at prepare at for each  conf alt: " + elapsedPrepare + ", at making view: " + elapsedView + ", html size: " + html.Length + "\n");
+        }
+
         public async Task MultiTestWithSearch(Stopwatch stopwatch, StringBuilder stringBuilder)
         {
             stopwatch.Start();
@@ -240,6 +285,84 @@ namespace PerformanceTesterCSS.Controllers
             stopwatch.Reset();
 
             stringBuilder.Append("Approx elapsed at prepare at with single retrieve: " + elapsedPrepare004 + ", at making view: " + elapsedView004 + ", html size: " + html004.Length + "\n");
+        }
+
+        public async Task MultiTestWithNothing(Stopwatch stopwatch, StringBuilder stringBuilder)
+        {
+            stopwatch.Start();
+            List<ParticipationViewModel> participationViewModels = null;
+            for (int i = 0; i < 100; i++)
+            {
+                participationViewModels = await GetParticipationViewModelsWithNothing();
+            }
+            stopwatch.Stop();
+            long elapsedPrepare = stopwatch.ElapsedMilliseconds / 100;
+            stopwatch.Reset();
+
+            String html = null;
+            stopwatch.Start();
+            for (int i = 0; i < 10; i++)
+            {
+                html = await this.RenderViewAsync<List<ParticipationViewModel>>("ParticipationsIndexWithNothing", participationViewModels);
+                //html004 = "test";
+            }
+            stopwatch.Stop();
+            long elapsedView = stopwatch.ElapsedMilliseconds / 10;
+            stopwatch.Reset();
+
+            stringBuilder.Append("Approx elapsed at prepare at with nothing: " + elapsedPrepare + ", at making view: " + elapsedView + ", html size: " + html.Length + "\n");
+        }
+
+        public async Task MultiTestForEachConf(Stopwatch stopwatch, StringBuilder stringBuilder)
+        {
+            stopwatch.Start();
+            List<SeasonEachConfViewModel> seasonEachConfViewModels = null;
+            for (int i = 0; i < 100; i++)
+            {
+                seasonEachConfViewModels = await GetParticipationViewModelsForEachConference();
+            }
+            stopwatch.Stop();
+            long elapsedPrepare = stopwatch.ElapsedMilliseconds / 100;
+            stopwatch.Reset();
+
+            String html = null;
+            stopwatch.Start();
+            for (int i = 0; i < 10; i++)
+            {
+                html = await this.RenderViewAsync<List<SeasonEachConfViewModel>>("ParticipationsIndexForEachConf", seasonEachConfViewModels);
+                //html004 = "test";
+            }
+            stopwatch.Stop();
+            long elapsedView = stopwatch.ElapsedMilliseconds / 10;
+            stopwatch.Reset();
+
+            stringBuilder.Append("Approx elapsed at prepare at with nothing: " + elapsedPrepare + ", at making view: " + elapsedView + ", html size: " + html.Length + "\n");
+        }
+
+        public async Task MultiTestForEachConfAlt(Stopwatch stopwatch, StringBuilder stringBuilder)
+        {
+            stopwatch.Start();
+            List<SeasonEachConfViewModel> seasonEachConfViewModels = null;
+            for (int i = 0; i < 100; i++)
+            {
+                seasonEachConfViewModels = await GetParticipationViewModelsForEachConferenceAlternative();
+            }
+            stopwatch.Stop();
+            long elapsedPrepare = stopwatch.ElapsedMilliseconds / 100;
+            stopwatch.Reset();
+
+            String html = null;
+            stopwatch.Start();
+            for (int i = 0; i < 10; i++)
+            {
+                html = await this.RenderViewAsync<List<SeasonEachConfViewModel>>("ParticipationsIndexForEachConfAlt", seasonEachConfViewModels);
+                //html004 = "test";
+            }
+            stopwatch.Stop();
+            long elapsedView = stopwatch.ElapsedMilliseconds / 10;
+            stopwatch.Reset();
+
+            stringBuilder.Append("Approx elapsed at prepare at with nothing: " + elapsedPrepare + ", at making view: " + elapsedView + ", html size: " + html.Length + "\n");
         }
 
         private async Task<List<ParticipationViewModel>> GetParticipationViewModelsClassic()
